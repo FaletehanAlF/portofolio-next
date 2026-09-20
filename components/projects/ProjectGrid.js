@@ -4,7 +4,7 @@ export default function ProjectGrid({ projects = [] }) {
   if (projects.length === 0) {
     return (
       <div>
-        <p>ProjectGrid placeholder — no projects yet.</p>
+        <p>No projects available.</p>
       </div>
     );
   }

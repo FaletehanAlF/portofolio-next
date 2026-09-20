@@ -2,7 +2,7 @@ export default function ProjectDetail({ project }) {
   if (!project) {
     return (
       <div>
-        <p>ProjectDetail placeholder — project not found.</p>
+        <p>Project not found.</p>
       </div>
     );
   }
