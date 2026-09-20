@@ -2,7 +2,7 @@ export default function CertificateCard({ certificate }) {
   if (!certificate) {
     return (
       <div>
-        <p>CertificateCard placeholder</p>
+        <p>Certificate</p>
       </div>
     );
   }

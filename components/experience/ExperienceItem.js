@@ -2,7 +2,7 @@ export default function ExperienceItem({ experience }) {
   if (!experience) {
     return (
       <div>
-        <p>ExperienceItem placeholder</p>
+        <p>Experience</p>
       </div>
     );
   }
