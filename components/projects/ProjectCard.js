@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function ProjectCard({ project }) {
@@ -8,8 +9,14 @@ export default function ProjectCard({ project }) {
   return (
     <article className="flex flex-col overflow-hidden rounded-xl border border-white/[0.07] bg-white/[0.02]">
       {image ? (
-        <div className="aspect-[16/10] overflow-hidden bg-white/[0.04]">
-          <img src={image} alt={title} className="h-full w-full object-cover" loading="lazy" />
+        <div className="relative aspect-[16/10] overflow-hidden bg-white/[0.04]">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover"
+          />
         </div>
       ) : null}
 
