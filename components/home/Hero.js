@@ -1,13 +1,6 @@
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import PixelSnow from '@/components/ui/PixelSnow.js';
-
-// Lanyard uses WebGL + Rapier physics — client-only so SSR never evaluates
-// browser/WASM code paths. Loading placeholder reserves layout height.
-const Lanyard = dynamic(() => import('@/components/ui/Lanyard.js'), {
-  ssr: false,
-  loading: () => <div aria-hidden="true" className="h-[320px] w-full sm:h-[380px] lg:h-[520px]" />,
-});
+import LanyardWrapper from '@/components/home/LanyardWrapper.js';
 
 export default function Hero() {
   return (
@@ -67,7 +60,7 @@ export default function Hero() {
           </div>
 
           <div className="relative z-0 mx-auto w-full max-w-[420px] sm:max-w-[480px] lg:max-w-none">
-            <Lanyard
+            <LanyardWrapper
               position={[0, 0, 20]}
               gravity={[0, -40, 0]}
               className="h-[320px] w-full sm:h-[380px] lg:h-[520px]"
