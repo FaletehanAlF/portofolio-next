@@ -226,11 +226,15 @@ function Band({
   }, [frontImage, backImage, imageFit, frontTex, backTex, materials.base.map]);
 
   const [curve] = useState(() => {
+    // Initialize with distinct points matching the rigid-body rest layout
+    // (group [0,4,0] + local offsets). Four coincident points would make the
+    // chordal parameterization divide by zero-length segments; distinct
+    // points keep the very first getPoints() finite even before physics ticks.
     const c = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(),
-      new THREE.Vector3(),
-      new THREE.Vector3(),
-      new THREE.Vector3(),
+      new THREE.Vector3(1.5, 4, 0),
+      new THREE.Vector3(1, 4, 0),
+      new THREE.Vector3(0.5, 4, 0),
+      new THREE.Vector3(0, 4, 0),
     ]);
     c.curveType = 'chordal';
     return c;
