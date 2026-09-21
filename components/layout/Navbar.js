@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import GooeyNav from '@/components/ui/GooeyNav.js';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -26,16 +27,17 @@ export default function Navbar() {
           Faletehan Al Farabi
         </Link>
 
-        <div className="hidden items-center gap-7 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-[13px] font-normal leading-none tracking-[-0.01em] text-zinc-400 transition-colors hover:text-white"
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className="hidden items-center md:flex">
+          <GooeyNav
+            items={navLinks}
+            particleCount={10}
+            particleDistances={[60, 12]}
+            particleR={60}
+            animationTime={500}
+            timeVariance={200}
+            colors={[1, 1, 1, 1, 1, 1]}
+            initialActiveIndex={0}
+          />
         </div>
 
         <button
