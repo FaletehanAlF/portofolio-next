@@ -26,7 +26,12 @@ export default function SplitText({
   const ref = useRef(null);
   const animationCompletedRef = useRef(false);
   const onCompleteRef = useRef(onLetterAnimationComplete);
-  const [fontsLoaded, setFontsLoaded] = useState(false);
+  // Lazily check font status so no synchronous setState is needed in an effect.
+  // Rendered output doesn't depend on this flag (it only gates the GSAP
+  // start), so server/client initial values can't cause hydration mismatch.
+  const [fontsLoaded, setFontsLoaded] = useState(
+    () => typeof document === 'undefined' || !document.fonts || document.fonts.status === 'loaded'
+  );
 
   // Keep callback ref updated
   useEffect(() => {
@@ -34,14 +39,15 @@ export default function SplitText({
   }, [onLetterAnimationComplete]);
 
   useEffect(() => {
-    if (document.fonts.status === 'loaded') {
-      setFontsLoaded(true);
-    } else {
-      document.fonts.ready.then(() => {
-        setFontsLoaded(true);
-      });
-    }
-  }, []);
+    if (fontsLoaded || typeof document === 'undefined' || !document.fonts) return;
+    let cancelled = false;
+    document.fonts.ready.then(() => {
+      if (!cancelled) setFontsLoaded(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [fontsLoaded]);
 
   useGSAP(
     () => {
