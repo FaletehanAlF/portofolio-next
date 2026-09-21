@@ -1,4 +1,4 @@
-import PixelSnow from '@/components/ui/PixelSnow.js';
+import ShapeGrid from '@/components/ui/ShapeGrid.js';
 import LanyardWrapper from '@/components/home/LanyardWrapper.js';
 import SpecularButton from '@/components/ui/SpecularButton.js';
 import SplitText from '@/components/ui/SplitText.js';
@@ -7,23 +7,18 @@ export default function Hero() {
   return (
     <section className="relative isolate overflow-hidden bg-[#0a0a0a]">
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-        <PixelSnow
-          color="#ffffff"
-          flakeSize={0.01}
-          minFlakeSize={1.25}
-          pixelResolution={200}
-          speed={1.25}
-          density={0.3}
-          direction={125}
-          brightness={1}
-          depthFade={8}
-          farPlane={20}
-          gamma={0.4545}
-          variant="square"
-          className="h-full w-full opacity-[0.28]"
-          style={{ background: 'transparent' }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/0 via-[#0a0a0a]/0 to-[#0a0a0a]" />
+        <div className="pointer-events-auto absolute inset-0">
+          <ShapeGrid
+            speed={0.5}
+            squareSize={48}
+            direction="diagonal"
+            borderColor="rgba(255, 255, 255, 0.07)"
+            hoverFillColor="rgba(255, 255, 255, 0.12)"
+            shape="square"
+            hoverTrailAmount={5}
+          />
+        </div>
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/0 via-[#0a0a0a]/0 to-[#0a0a0a]" />
       </div>
 
       <div className="mx-auto mt-4 max-w-[1120px] px-6 pb-14 pt-0 sm:px-8 sm:pb-16 sm:pt-1 lg:pb-20 lg:pt-2">
