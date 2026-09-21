@@ -1,7 +1,7 @@
 import PixelSnow from '@/components/ui/PixelSnow.js';
 import LanyardWrapper from '@/components/home/LanyardWrapper.js';
 import SpecularButton from '@/components/ui/SpecularButton.js';
-import DepthText from '@/components/ui/DepthText.js';
+import SplitText from '@/components/ui/SplitText.js';
 
 export default function Hero() {
   return (
