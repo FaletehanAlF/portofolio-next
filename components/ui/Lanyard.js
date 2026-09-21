@@ -384,10 +384,16 @@ function Band({
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
             onPointerUp={(e) => (e.target.releasePointerCapture(e.pointerId), drag(false))}
-            onPointerDown={(e) => (
-              e.target.setPointerCapture(e.pointerId),
-              drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())))
-            )}
+            onPointerDown={(e) => {
+              e.target.setPointerCapture(e.pointerId);
+              // Validate both sides before storing the grab offset: a NaN
+              // offset here would be subtracted every frame in useFrame and
+              // permanently poison the kinematic target.
+              const t = readTranslation(card.current);
+              if (!isFiniteXYZ(e.point) || !t) return;
+              tmpA.set(t.x, t.y, t.z);
+              drag(new THREE.Vector3().copy(e.point).sub(tmpA));
+            }}
           >
             <mesh geometry={nodes.card.geometry}>
               <meshPhysicalMaterial
