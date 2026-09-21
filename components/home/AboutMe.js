@@ -176,7 +176,7 @@ export default function AboutMe() {
             tapeRight="bg-[#f5e6b8]/90"
           />
 
-          <div className="text-center">
+          <div className="order-first text-center lg:order-none">
             <h2
               className={`${handwriting.className} inline-block border-2 px-5 py-0.5 text-[30px] font-semibold leading-tight`}
               style={{ borderColor: INK, color: INK }}
