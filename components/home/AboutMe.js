@@ -1,5 +1,6 @@
 import { Caveat } from 'next/font/google';
 import { FaBolt, FaCode, FaPalette, FaServer } from 'react-icons/fa';
+import FlipCard from '@/components/ui/FlipCard.js';
 
 const handwriting = Caveat({
   weight: ['500', '600', '700'],
