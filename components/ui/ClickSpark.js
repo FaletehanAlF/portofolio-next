@@ -169,11 +169,11 @@ const ClickSpark = ({
       if (sparksRef.current.length > MAX_SPARKS) {
         sparksRef.current.splice(0, sparksRef.current.length - MAX_SPARKS);
       }
-      if (animationIdRef.current === null) {
-        animationIdRef.current = requestAnimationFrame(draw);
+      if (animationIdRef.current === null && tickRef.current) {
+        animationIdRef.current = requestAnimationFrame((t) => tickRef.current?.(t));
       }
     },
-    [sparkCount, draw]
+    [sparkCount]
   );
 
   return (
