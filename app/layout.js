@@ -19,18 +19,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-zinc-100">
-        <ClickSpark
-          sparkColor="#fff"
-          sparkSize={10}
-          sparkRadius={18}
-          sparkCount={8}
-          duration={400}
-          className="flex min-h-screen flex-col"
-        >
-          {children}
-        </ClickSpark>
-      </body>
+      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-zinc-100">{children}</body>
     </html>
   );
 }
