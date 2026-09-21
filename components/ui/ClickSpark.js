@@ -18,8 +18,8 @@ const ClickSpark = ({
   const canvasRef = useRef(null);
   const sparksRef = useRef([]);
   const animationIdRef = useRef(null);
+  const tickRef = useRef(null);
   const propsRef = useRef({ sparkColor, sparkSize, sparkRadius, duration, easing, extraScale });
-  propsRef.current = { sparkColor, sparkSize, sparkRadius, duration, easing, extraScale };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -63,31 +63,31 @@ const ClickSpark = ({
     };
   }, []);
 
-  const easeFunc = useCallback((t) => {
-    const e = propsRef.current.easing;
-    switch (e) {
-      case 'linear':
-        return t;
-      case 'ease-in':
-        return t * t;
-      case 'ease-in-out':
-        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-      default:
-        return t * (2 - t);
-    }
-  }, []);
+  // Loop animasi hanya hidup saat ada spark (hemat baterai/CPU).
+  // tick disimpan di ref agar tidak ada self-reference di useCallback.
+  useEffect(() => {
+    propsRef.current = { sparkColor, sparkSize, sparkRadius, duration, easing, extraScale };
 
-  const stopLoop = useCallback(() => {
-    if (animationIdRef.current !== null) {
-      cancelAnimationFrame(animationIdRef.current);
-      animationIdRef.current = null;
-    }
-  }, []);
+    const ease = (t) => {
+      switch (propsRef.current.easing) {
+        case 'linear':
+          return t;
+        case 'ease-in':
+          return t * t;
+        case 'ease-in-out':
+          return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        default:
+          return t * (2 - t);
+      }
+    };
 
-  useEffect(() => stopLoop, [stopLoop]);
+    const kick = (timestamp) => {
+      if (tickRef.current) animationIdRef.current = requestAnimationFrame((t) => tickRef.current(t));
+      else animationIdRef.current = null;
+      void timestamp;
+    };
 
-  const draw = useCallback(
-    (timestamp) => {
+    tickRef.current = (timestamp) => {
       const canvas = canvasRef.current;
       if (!canvas) {
         animationIdRef.current = null;
@@ -111,7 +111,7 @@ const ClickSpark = ({
         if (elapsed >= duration) return false;
 
         const progress = elapsed / duration;
-        const eased = easeFunc(progress);
+        const eased = ease(progress);
         const distance = eased * sparkRadius * extraScale;
         const lineLength = sparkSize * (1 - eased);
 
@@ -134,10 +134,22 @@ const ClickSpark = ({
         animationIdRef.current = null;
         return;
       }
-      animationIdRef.current = requestAnimationFrame(draw);
-    },
-    [easeFunc]
-  );
+      kick(timestamp);
+    };
+
+    // Lanjutkan sisa spark jika props berubah di tengah animasi.
+    if (sparksRef.current.length > 0 && animationIdRef.current === null) {
+      animationIdRef.current = requestAnimationFrame((t) => tickRef.current?.(t));
+    }
+
+    return () => {
+      if (animationIdRef.current !== null) {
+        cancelAnimationFrame(animationIdRef.current);
+        animationIdRef.current = null;
+      }
+      tickRef.current = null;
+    };
+  }, [sparkColor, sparkSize, sparkRadius, duration, easing, extraScale]);
 
   const handleClick = useCallback(
     (e) => {
