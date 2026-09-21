@@ -2,6 +2,7 @@ import Link from 'next/link';
 import ShapeGrid from '@/components/ui/ShapeGrid.js';
 import LanyardWrapper from '@/components/home/LanyardWrapper.js';
 import SplitText from '@/components/ui/SplitText.js';
+import StarBorder from '@/components/ui/StarBorder.js';
 
 export default function Hero() {
   return (
@@ -85,39 +86,57 @@ export default function Hero() {
             />
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
+              <StarBorder
+                as={Link}
                 href="/projects"
                 aria-label="View Projects"
-                className="inline-flex items-center gap-2 rounded-[18px] bg-white px-5 py-2.5 text-[13px] font-medium tracking-[-0.01em] text-black transition-colors hover:bg-zinc-200"
+                color="#22d3ee"
+                speed="5s"
+                thickness={1}
+                backgroundColor="#ffffff"
+                textColor="#000000"
+                borderColor="rgba(255, 255, 255, 0.25)"
+                innerClassName="px-5 py-2.5 text-[13px] font-medium tracking-[-0.01em]"
               >
-                View Projects
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path
-                    d="M3 8h10M8.5 4.5 12 8l-3.5 3.5"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </Link>
-              <a
+                <span className="inline-flex items-center gap-2">
+                  View Projects
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path
+                      d="M3 8h10M8.5 4.5 12 8l-3.5 3.5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </StarBorder>
+              <StarBorder
+                as="a"
                 href="/cv-faletehan-al-farabi.pdf"
                 download="CV-Faletehan-Al-Farabi.pdf"
                 aria-label="Download CV"
-                className="inline-flex items-center gap-2 rounded-[18px] border border-white/15 bg-white/[0.04] px-5 py-2.5 text-[13px] font-medium tracking-[-0.01em] text-zinc-100 transition-colors hover:border-white/25 hover:bg-white/[0.08]"
+                color="#ffffff"
+                speed="6s"
+                thickness={1}
+                backgroundColor="rgba(255, 255, 255, 0.04)"
+                textColor="#f5f5f5"
+                borderColor="rgba(255, 255, 255, 0.15)"
+                innerClassName="px-5 py-2.5 text-[13px] font-medium tracking-[-0.01em]"
               >
-                Download CV
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path
-                    d="M8 2.5V10m0 0L5.5 7.5M8 10l2.5-2.5M3 12.5V13a1.5 1.5 0 0 0 1.5 1.5h7A1.5 1.5 0 0 0 13 13v-.5"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </a>
+                <span className="inline-flex items-center gap-2">
+                  Download CV
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path
+                      d="M8 2.5V10m0 0L5.5 7.5M8 10l2.5-2.5M3 12.5V13a1.5 1.5 0 0 0 1.5 1.5h7A1.5 1.5 0 0 0 13 13v-.5"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </StarBorder>
             </div>
           </div>
 
