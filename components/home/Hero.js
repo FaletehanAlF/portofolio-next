@@ -29,35 +29,65 @@ export default function Hero() {
       <div className="mx-auto max-w-[1120px] px-6 py-14 sm:px-8 sm:py-16 lg:py-20">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-6">
           <div className="relative z-10 max-w-[640px]">
-            <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-zinc-500">Software Engineering Student</p>
+            <SplitText
+              tag="p"
+              text="Software Engineering Student"
+              className="text-[11px] font-medium uppercase tracking-[0.14em] text-zinc-500"
+              delay={30}
+              duration={0.6}
+              ease="power3.out"
+              splitType="words"
+              from={{ opacity: 0, y: 20 }}
+              to={{ opacity: 1, y: 0 }}
+              threshold={0.1}
+              rootMargin="-100px"
+              textAlign="left"
+            />
 
-            <h1 className="mt-5 max-w-full overflow-visible pb-2">
-              <DepthText
-                text="Faletehan Al Farabi"
-                layers={28}
-                depth={2}
-                faceColor="#f8fafc"
-                depthColor="#525252"
-                tilt={6}
-                pointerTracking
-                smoothing={0.14}
-                perspective={900}
-                autoOrbit
-                orbitSpeed={0.3}
-                fontSize="clamp(1.7rem, 4vw + 1rem, 2.65rem)"
-                fontWeight={800}
-                shadow
-              />
-            </h1>
+            <SplitText
+              tag="h1"
+              text="Faletehan Al Farabi"
+              className="mt-5 max-w-full text-[clamp(1.7rem,4vw+1rem,2.65rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-white"
+              delay={35}
+              duration={0.9}
+              ease="power3.out"
+              splitType="chars"
+              from={{ opacity: 0, y: 50 }}
+              to={{ opacity: 1, y: 0 }}
+              threshold={0.1}
+              rootMargin="-100px"
+              textAlign="left"
+            />
 
-            <p className="mt-3 text-[15px] font-normal leading-6 tracking-[-0.01em] text-zinc-400 sm:text-[16px]">
-              Full-Stack Web Developer
-            </p>
+            <SplitText
+              tag="p"
+              text="Full-Stack Web Developer"
+              className="mt-3 text-[15px] font-normal leading-6 tracking-[-0.01em] text-zinc-400 sm:text-[16px]"
+              delay={45}
+              duration={0.8}
+              ease="power3.out"
+              splitType="words"
+              from={{ opacity: 0, y: 24 }}
+              to={{ opacity: 1, y: 0 }}
+              threshold={0.1}
+              rootMargin="-100px"
+              textAlign="left"
+            />
 
-            <p className="mt-5 max-w-[560px] text-[14px] leading-6 text-zinc-400 sm:text-[14.5px] sm:leading-7">
-              Saya membangun website dan digital experiences dengan fokus pada clean interface, usability, dan solusi yang
-              relevan.
-            </p>
+            <SplitText
+              tag="p"
+              text="Saya membangun website dan digital experiences dengan fokus pada clean interface, usability, dan solusi yang relevan."
+              className="mt-5 max-w-[560px] text-[14px] leading-6 text-zinc-400 sm:text-[14.5px] sm:leading-7"
+              delay={20}
+              duration={0.7}
+              ease="power3.out"
+              splitType="words"
+              from={{ opacity: 0, y: 24 }}
+              to={{ opacity: 1, y: 0 }}
+              threshold={0.1}
+              rootMargin="-100px"
+              textAlign="left"
+            />
 
             <div className="mt-8 flex flex-wrap gap-3">
               <SpecularButton
