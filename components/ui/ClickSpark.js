@@ -21,47 +21,67 @@ const ClickSpark = ({
   const tickRef = useRef(null);
   const propsRef = useRef({ sparkColor, sparkSize, sparkRadius, duration, easing, extraScale });
 
-  useEffect(() => {
+  const getDpr = () =>
+    Math.min(typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1, 2);
+
+  // Canvas bersifat fixed selebar viewport: titik (0,0) kanvas selalu sama
+  // dengan titik (0,0) viewport, jadi e.clientX/clientY bisa dipakai langsung
+  // tanpa dikurangi rect dan anti-meleset oleh scroll/tinggi halaman.
+  const syncSize = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return undefined;
-    const parent = canvas.parentElement;
-    if (!parent) return undefined;
+    if (!canvas || typeof window === 'undefined') return;
+    const dpr = getDpr();
+    const w = Math.max(1, Math.round(window.innerWidth * dpr));
+    const h = Math.max(1, Math.round(window.innerHeight * dpr));
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+  }, []);
+
+  useEffect(() => {
+    syncSize();
+    if (typeof window === 'undefined') return undefined;
 
     let resizeTimeout;
-
-    const resizeCanvas = () => {
-      const rect = parent.getBoundingClientRect();
-      const dpr = Math.min(typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1, 2);
-      const w = Math.round(rect.width * dpr);
-      const h = Math.round(rect.height * dpr);
-      if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = Math.max(1, w);
-        canvas.height = Math.max(1, h);
-      }
-    };
-
     const handleResize = () => {
       clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(resizeCanvas, 100);
+      resizeTimeout = setTimeout(syncSize, 100);
     };
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
 
-    resizeCanvas();
-
-    if (typeof ResizeObserver === 'undefined') {
-      window.addEventListener('resize', handleResize);
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        clearTimeout(resizeTimeout);
-      };
+    // Perubahan DPR (pindah monitor / zoom) tidak selalu memicu resize.
+    let dprQuery = null;
+    const handleDprChange = () => {
+      syncSize();
+      // Daftarkan ulang query dengan nilai DPR terbaru.
+      try {
+        dprQuery?.removeEventListener('change', handleDprChange);
+      } catch {
+        // abaikan
+      }
+      if (typeof window.matchMedia === 'function') {
+        dprQuery = window.matchMedia(`(resolution: ${getDpr()}dppx)`);
+        dprQuery.addEventListener('change', handleDprChange);
+      }
+    };
+    if (typeof window.matchMedia === 'function') {
+      dprQuery = window.matchMedia(`(resolution: ${getDpr()}dppx)`);
+      dprQuery.addEventListener('change', handleDprChange);
     }
 
-    const ro = new ResizeObserver(handleResize);
-    ro.observe(parent);
     return () => {
-      ro.disconnect();
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
       clearTimeout(resizeTimeout);
+      try {
+        dprQuery?.removeEventListener('change', handleDprChange);
+      } catch {
+        // abaikan
+      }
     };
-  }, []);
+  }, [syncSize]);
 
   // Loop animasi hanya hidup saat ada spark (hemat baterai/CPU).
   // tick disimpan di ref agar tidak ada self-reference di useCallback.
@@ -81,10 +101,12 @@ const ClickSpark = ({
       }
     };
 
-    const kick = (timestamp) => {
-      if (tickRef.current) animationIdRef.current = requestAnimationFrame((t) => tickRef.current(t));
-      else animationIdRef.current = null;
-      void timestamp;
+    const schedule = () => {
+      if (tickRef.current) {
+        animationIdRef.current = requestAnimationFrame((t) => tickRef.current?.(t));
+      } else {
+        animationIdRef.current = null;
+      }
     };
 
     tickRef.current = (timestamp) => {
@@ -99,8 +121,12 @@ const ClickSpark = ({
         return;
       }
 
+      // Jaga-jaga: kalau ukuran viewport berubah tanpa event, selaraskan dulu
+      // sebelum menggambar agar posisi spark tidak pernah bergeser.
+      syncSize();
+
       const { sparkColor, sparkSize, sparkRadius, duration, extraScale } = propsRef.current;
-      const dpr = Math.min(typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1, 2);
+      const dpr = getDpr();
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const cssW = canvas.width / dpr;
       const cssH = canvas.height / dpr;
@@ -134,7 +160,7 @@ const ClickSpark = ({
         animationIdRef.current = null;
         return;
       }
-      kick(timestamp);
+      schedule();
     };
 
     // Lanjutkan sisa spark jika props berubah di tengah animasi.
@@ -149,12 +175,14 @@ const ClickSpark = ({
       }
       tickRef.current = null;
     };
-  }, [sparkColor, sparkSize, sparkRadius, duration, easing, extraScale]);
+  }, [sparkColor, sparkSize, sparkRadius, duration, easing, extraScale, syncSize]);
 
   const handleClick = useCallback(
     (e) => {
       const canvas = canvasRef.current;
       if (!canvas) return;
+      // Kanvas fixed = origin viewport, jadi kurangi rect agar tetap tepat
+      // walau ada pinch-zoom / visual viewport yang bergeser.
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -181,7 +209,7 @@ const ClickSpark = ({
       <canvas
         ref={canvasRef}
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-[9999] block select-none"
+        className="pointer-events-none fixed inset-0 z-[9999] block select-none"
       />
       {children}
     </div>
