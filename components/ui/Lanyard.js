@@ -152,14 +152,13 @@ function Band({
   const j3 = useRef(null);
   const card = useRef(null);
 
-  const { vec, ang, rot, dir, tmpA, tmpB } = useMemo(
+  const { vec, ang, rot, dir, tmpA } = useMemo(
     () => ({
       vec: new THREE.Vector3(),
       ang: new THREE.Vector3(),
       rot: new THREE.Vector3(),
       dir: new THREE.Vector3(),
       tmpA: new THREE.Vector3(),
-      tmpB: new THREE.Vector3(),
     }),
     []
   );
