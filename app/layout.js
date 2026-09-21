@@ -1,5 +1,4 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import ClickSpark from "@/components/ui/ClickSpark.js";
 import "./globals.css";
 
 const geistSans = Geist({
