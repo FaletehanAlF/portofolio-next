@@ -17,8 +17,11 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/[0.06] bg-[#0a0a0a]">
-      <nav className="mx-auto flex h-[56px] max-w-[1120px] items-center justify-between px-6 sm:px-8" aria-label="Primary">
+    <header className="sticky top-3 z-50 w-full bg-transparent px-4 sm:px-6">
+      <nav
+        className="mx-auto flex h-[56px] max-w-[1120px] items-center justify-between rounded-full border border-white/10 bg-white/[0.06] px-6 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl backdrop-saturate-150 sm:px-8"
+        aria-label="Primary"
+      >
         <Link href="/" className="text-[13px] font-medium tracking-[-0.01em] text-white">
           Faletehan Al Farabi
         </Link>
@@ -40,7 +43,7 @@ export default function Navbar() {
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/10 text-zinc-300 transition-colors hover:border-white/20 hover:text-white md:hidden"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-zinc-300 transition-colors hover:border-white/20 hover:text-white md:hidden"
         >
           <span className="sr-only">Menu</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -54,20 +57,18 @@ export default function Navbar() {
       </nav>
 
       {open ? (
-        <div className="border-t border-white/[0.06] bg-[#0a0a0a] md:hidden">
-          <div className="mx-auto max-w-[1120px] px-6 py-4 sm:px-8">
-            <div className="flex flex-col">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="py-3 text-[14px] font-normal text-zinc-300 transition-colors hover:text-white"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+        <div className="mx-auto mt-2 max-w-[1120px] rounded-3xl border border-white/10 bg-[#0a0a0a]/80 p-2 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl backdrop-saturate-150 md:hidden">
+          <div className="flex flex-col px-4 py-2">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className="rounded-full py-3 text-[14px] font-normal text-zinc-300 transition-colors hover:bg-white/[0.06] hover:text-white"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       ) : null}
