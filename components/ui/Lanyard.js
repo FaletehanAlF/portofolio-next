@@ -358,7 +358,9 @@ function Band({
     const av = readAngvel(card.current);
     const rt = readRotation(card.current);
     if (!av || !rt) return;
-    card.current.setAngvel({ x: av.x, y: av.y - rt.y * 0.25, z: av.z });
+    ang.set(av.x, av.y, av.z);
+    rot.set(rt.x, rt.y, rt.z);
+    card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
   });
 
   return (
