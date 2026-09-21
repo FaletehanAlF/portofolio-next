@@ -165,7 +165,7 @@ export default function AboutMe() {
           about me!
         </p>
 
-        <div className="mt-6 grid items-center gap-10 lg:grid-cols-[240px_minmax(0,1fr)_240px] lg:gap-8">
+        <div className="mt-6 grid items-center gap-8 lg:grid-cols-[240px_minmax(0,1fr)_240px] lg:gap-8">
           <Polaroid
             caption="2024"
             rotate="-rotate-3"
