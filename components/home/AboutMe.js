@@ -10,10 +10,6 @@ const handwriting = Caveat({
 const INK = '#f4f4f5';
 const INK_SOFT = '#d4d4d8';
 
-// Tepi robek ala washi tape (kiri-kanan bergerigi, atas-bawah lurus).
-const TORN_EDGES =
-  'polygon(8px 0, calc(100% - 8px) 0, 100% 14%, calc(100% - 5px) 28%, 100% 42%, calc(100% - 5px) 56%, 100% 70%, calc(100% - 5px) 84%, calc(100% - 8px) 100%, 8px 100%, 0 86%, 5px 72%, 0 58%, 5px 44%, 0 30%, 5px 16%)';
-
 function Tape({ className = '', color = 'bg-[#c3d4f5]/80' }) {
   return (
     <span
@@ -34,7 +30,7 @@ function Polaroid({ caption, rotate = '', front, back, flipLabel, tapeLeft = '',
             front={front}
             back={back}
             axis="y"
-            flipOnClick
+            flipOnClick={false}
             flipOnHover
             draggable
             tilt
@@ -122,9 +118,6 @@ function ProfileBack() {
         <br />
         Full-Stack Web Developer
       </p>
-      <p className={`${handwriting.className} mt-4 text-[18px] font-medium leading-none text-zinc-500`}>
-        tap to flip back
-      </p>
     </div>
   );
 }
@@ -147,17 +140,6 @@ function WorkspaceBack() {
         ))}
       </ul>
     </div>
-  );
-}
-
-function Tag({ label, bg, fg, rotate = '' }) {
-  return (
-    <span
-      className={`${handwriting.className} ${rotate} inline-block px-6 py-1.5 text-[24px] font-bold leading-none`}
-      style={{ backgroundColor: bg, color: fg, clipPath: TORN_EDGES }}
-    >
-      {label}
-    </span>
   );
 }
 
@@ -210,13 +192,6 @@ export default function AboutMe() {
               ideas into websites. I care about clean interfaces, the small details everyone
               forgets, and shipping work that genuinely makes someone&apos;s day easier.
             </p>
-
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-3">
-              <Tag label="Frontend Dev" bg="#ffc531" fg="#232323" rotate="-rotate-1" />
-              <Tag label="Backend Dev" bg="#2fbf71" fg="#ffffff" rotate="rotate-1" />
-              <Tag label="UI Design" bg="#f4588a" fg="#ffffff" rotate="-rotate-1" />
-              <Tag label="Motion Design" bg="#2f5bff" fg="#101010" rotate="rotate-1" />
-            </div>
           </div>
 
           <Polaroid
