@@ -18,12 +18,36 @@ const LANYARD_TEXTURE_URL = '/images/lanyard/lanyard.png';
 const BLANK_PIXEL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
 
-// The card model's front face is UV-mapped to the LEFT half of the texture
-// atlas and the back face to the RIGHT half (measured from card.glb). Each
-// custom image is composited into its own half so the two faces render
-// independently, aspect-preserving (no stretching).
-const FRONT_UV_RECT = { x: 0, y: 0, w: 0.5, h: 0.755 };
-const BACK_UV_RECT = { x: 0.5, y: 0, w: 0.5, h: 0.757 };
+// --- Finite-number guards -----------------------------------------------
+// Every value that flows into CatmullRomCurve3 / MeshLineGeometry must be a
+// finite number. A single NaN poisons the whole position attribute and
+// three throws `computeBoundingSphere(): Computed radius is NaN`. These
+// helpers validate physics output BEFORE it touches the curve, so a body
+// that isn't ready (or ever goes non-finite) only skips a frame instead of
+// corrupting the geometry or the physics world.
+function isFiniteXYZ(v) {
+  return v != null && Number.isFinite(v.x) && Number.isFinite(v.y) && Number.isFinite(v.z);
+}
+
+function readTranslation(body) {
+  if (!body || typeof body.translation !== 'function') return null;
+  const t = body.translation();
+  return isFiniteXYZ(t) ? t : null;
+}
+
+function readAngvel(body) {
+  if (!body || typeof body.angvel !== 'function') return null;
+  const a = body.angvel();
+  return isFiniteXYZ(a) ? a : null;
+}
+
+function readRotation(body) {
+  if (!body || typeof body.rotation !== 'function') return null;
+  const r = body.rotation();
+  // Rapier returns a quaternion {x,y,z,w}; Vector3.copy() consumes x/y/z.
+  if (r == null || !Number.isFinite(r.x) || !Number.isFinite(r.y) || !Number.isFinite(r.z)) return null;
+  return r;
+}
 
 export default function Lanyard({
   position = [0, 0, 30],
