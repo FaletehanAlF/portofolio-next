@@ -39,18 +39,13 @@ const techLogos = techStack.map((name) => {
   return {
     title: name,
     ariaLabel: name,
-    node: Icon ? <Icon size={18} aria-hidden="true" /> : null,
+    node: Icon ? (
+      <span title={name} className="inline-flex">
+        <Icon size={44} aria-hidden="true" />
+      </span>
+    ) : null,
   };
 });
-
-function renderTechItem(item) {
-  return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-[13px] leading-none tracking-[-0.01em] text-zinc-300 transition-colors hover:border-white/20 hover:text-white">
-      <span className="inline-flex text-[18px] text-zinc-400">{item.node}</span>
-      {item.title}
-    </span>
-  );
-}
 
 export default function TechStack() {
   if (!techStack || techStack.length === 0) {
@@ -59,30 +54,20 @@ export default function TechStack() {
 
   return (
     <section className="border-t border-white/[0.06] bg-[#0a0a0a]">
-      <div className="mx-auto max-w-[1120px] px-6 py-10 sm:px-8 sm:py-12">
-        <div className="shrink-0">
-          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-zinc-500">Tech Stack</p>
-          <h2 className="mt-3 text-[16px] font-medium tracking-[-0.015em] text-white">Tools I work with</h2>
-          <p className="mt-2 max-w-[480px] text-[13px] leading-5 text-zinc-500">
-            Focus on web fundamentals, modern frontend, and backend essentials.
-          </p>
-        </div>
-
-        <div className="mt-8">
-          <LogoLoop
-            logos={techLogos}
-            speed={60}
-            direction="left"
-            logoHeight={36}
-            gap={16}
-            hoverSpeed={0}
-            scaleOnHover
-            fadeOut
-            fadeOutColor="#0a0a0a"
-            renderItem={renderTechItem}
-            ariaLabel="Tech stack"
-          />
-        </div>
+      <div className="mx-auto max-w-[1120px] px-6 py-10 sm:px-8">
+        <LogoLoop
+          logos={techLogos}
+          speed={60}
+          direction="left"
+          logoHeight={44}
+          gap={72}
+          hoverSpeed={0}
+          scaleOnHover
+          fadeOut
+          fadeOutColor="#0a0a0a"
+          ariaLabel="Tech stack"
+          className="text-zinc-500"
+        />
       </div>
     </section>
   );
