@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 function resolveActiveIndex(items, pathname, fallback = 0) {
   if (!pathname || !Array.isArray(items)) return fallback;
@@ -32,9 +32,12 @@ export default function GooeyNav({
   const mountedRef = useRef(true);
 
   const pathname = usePathname();
-  const [activeIndex, setActiveIndex] = useState(() =>
-    pathname ? resolveActiveIndex(items, pathname, initialActiveIndex) : initialActiveIndex
-  );
+  // Single source of truth = route saat ini (tidak ada mirror state → tanpa setState di effect).
+  // Klik hanya menggerakkan pill + partikel secara optimistis via DOM;
+  // class aktif mengikuti pathname setelah navigasi selesai.
+  const activeIndex = pathname
+    ? resolveActiveIndex(items, pathname, initialActiveIndex)
+    : initialActiveIndex;
 
   const later = useCallback((fn, ms) => {
     const id = window.setTimeout(() => {
@@ -129,7 +132,6 @@ export default function GooeyNav({
   const goTo = useCallback(
     (liEl, index) => {
       if (!liEl || index === activeIndex) return;
-      setActiveIndex(index);
       updateEffectPosition(liEl);
       if (filterRef.current) {
         filterRef.current.querySelectorAll('.particle').forEach((p) => {
@@ -180,27 +182,9 @@ export default function GooeyNav({
     [goTo]
   );
 
-  // Sinkron saat route berubah (back/forward / navigasi langsung).
-  useEffect(() => {
-    if (!pathname) return;
-    const next = resolveActiveIndex(items, pathname, activeIndex);
-    if (next !== activeIndex) {
-      setActiveIndex(next);
-      const li = navRef.current?.querySelectorAll('li')[next];
-      if (li) {
-        updateEffectPosition(li);
-        if (textRef.current) {
-          textRef.current.classList.remove('active');
-          void textRef.current.offsetWidth;
-          textRef.current.classList.add('active');
-        }
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
-
   useEffect(() => {
     mountedRef.current = true;
+    const pendingTimeouts = timeoutsRef.current;
     const li = navRef.current?.querySelectorAll('li')[activeIndex];
     if (li) {
       updateEffectPosition(li);
@@ -236,8 +220,8 @@ export default function GooeyNav({
       }
       ro?.disconnect();
       window.removeEventListener('resize', updateOnResize);
-      timeoutsRef.current.forEach((id) => window.clearTimeout(id));
-      timeoutsRef.current.clear();
+      pendingTimeouts.forEach((id) => window.clearTimeout(id));
+      pendingTimeouts.clear();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeIndex]);
