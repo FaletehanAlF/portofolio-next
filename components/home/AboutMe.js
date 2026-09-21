@@ -161,10 +161,6 @@ function Tag({ label, bg, fg, rotate = '' }) {
   );
 }
 
-function Tile() {
-  return null;
-}
-
 export default function AboutMe() {
   return (
     <section aria-label="About me" className="relative overflow-hidden border-t border-white/[0.06] bg-[#0a0a0a]">
