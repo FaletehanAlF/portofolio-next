@@ -276,35 +276,90 @@ function Band({
   }, [bandTexture]);
 
   useFrame((state, delta) => {
+    // Guard 1: mesh + all physics bodies must exist. The old code only
+    // checked `fixed.current`, so frame 1 could read j1/j2/j3/card before
+    // Rapier attached them and feed undefined into the curve.
+    const geometry = band.current?.geometry;
+    if (!geometry || typeof geometry.setPoints !== 'function') return;
+    if (!fixed.current || !j1.current || !j2.current || !j3.current || !card.current) return;
+
+    // Guard 2: finite, clamped timestep. An unclamped delta (tab switch,
+    // hitches) makes `delta * maxSpeed` exceed 1, so lerped.lerp() wildly
+    // overshoots, the rope explodes to Infinity, and Infinity - Infinity
+    // becomes the NaN that poisons the position attribute.
+    const step = Number.isFinite(delta) ? Math.min(Math.max(delta, 0), 1 / 30) : 1 / 60;
+
     if (dragged) {
-      vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera);
-      dir.copy(vec).sub(state.camera.position).normalize();
-      vec.add(dir.multiplyScalar(state.camera.position.length()));
-      [card, j1, j2, j3, fixed].forEach((ref) => ref.current?.wakeUp());
-      card.current?.setNextKinematicTranslation({
-        x: vec.x - dragged.x,
-        y: vec.y - dragged.y,
-        z: vec.z - dragged.z,
-      });
+      if (isFiniteXYZ(dragged) && Number.isFinite(state.pointer?.x) && Number.isFinite(state.pointer?.y)) {
+        vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera);
+        dir.copy(vec).sub(state.camera.position);
+        const dirLen = dir.length();
+        if (Number.isFinite(dirLen) && dirLen > 1e-6 && isFiniteXYZ(vec)) {
+          dir.normalize();
+          vec.add(dir.multiplyScalar(state.camera.position.length()));
+          if (isFiniteXYZ(vec)) {
+            [card, j1, j2, j3, fixed].forEach((ref) => ref.current?.wakeUp?.());
+            const tx = vec.x - dragged.x;
+            const ty = vec.y - dragged.y;
+            const tz = vec.z - dragged.z;
+            // Guard 3: never push NaN into the physics world. One NaN
+            // kinematic target permanently corrupts all future translations.
+            if (Number.isFinite(tx) && Number.isFinite(ty) && Number.isFinite(tz)) {
+              card.current?.setNextKinematicTranslation?.({ x: tx, y: ty, z: tz });
+            }
+          }
+        }
+      }
     }
-    if (fixed.current) {
-      [j1, j2].forEach((ref) => {
-        if (!ref.current.lerped) ref.current.lerped = new THREE.Vector3().copy(ref.current.translation());
-        const clampedDistance = Math.max(0.1, Math.min(1, ref.current.lerped.distanceTo(ref.current.translation())));
-        ref.current.lerped.lerp(
-          ref.current.translation(),
-          delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
-        );
-      });
-      curve.points[0].copy(j3.current.translation());
-      curve.points[1].copy(j2.current.lerped);
-      curve.points[2].copy(j1.current.lerped);
-      curve.points[3].copy(fixed.current.translation());
-      band.current.geometry.setPoints(curve.getPoints(isMobile ? 16 : 32));
-      ang.copy(card.current.angvel());
-      rot.copy(card.current.rotation());
-      card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
+
+    // Guard 4: smooth j1/j2 only from finite translations. If a body isn't
+    // ready yet, skip the whole frame instead of seeding `lerped` with NaN
+    // (NaN lerped -> NaN distance -> NaN alpha -> NaN curve -> NaN geometry).
+    for (const ref of [j1, j2]) {
+      const t = readTranslation(ref.current);
+      if (!t) return;
+      if (!isFiniteXYZ(ref.current.lerped)) {
+        ref.current.lerped = new THREE.Vector3(t.x, t.y, t.z);
+      } else {
+        tmpA.set(t.x, t.y, t.z);
+        const dist = ref.current.lerped.distanceTo(tmpA);
+        if (!Number.isFinite(dist)) return;
+        const clampedDistance = Math.max(0.1, Math.min(1, dist));
+        let alpha = step * (minSpeed + clampedDistance * (maxSpeed - minSpeed));
+        if (!Number.isFinite(alpha)) return;
+        alpha = Math.max(0, Math.min(1, alpha));
+        ref.current.lerped.lerp(tmpA, alpha);
+        if (!isFiniteXYZ(ref.current.lerped)) return;
+      }
     }
+
+    // Guard 5: all four curve anchors must be finite before touching the curve.
+    const pJ3 = readTranslation(j3.current);
+    const pFixed = readTranslation(fixed.current);
+    if (!pJ3 || !pFixed) return;
+    if (!isFiniteXYZ(j1.current.lerped) || !isFiniteXYZ(j2.current.lerped)) return;
+
+    curve.points[0].set(pJ3.x, pJ3.y, pJ3.z);
+    curve.points[1].copy(j2.current.lerped);
+    curve.points[2].copy(j1.current.lerped);
+    curve.points[3].set(pFixed.x, pFixed.y, pFixed.z);
+    for (const p of curve.points) {
+      if (!isFiniteXYZ(p)) return;
+    }
+
+    const points = curve.getPoints(isMobile ? 16 : 32);
+    for (const p of points) {
+      if (!isFiniteXYZ(p)) return;
+    }
+    // Only finite points ever reach MeshLineGeometry, so the position
+    // attribute (and computeBoundingSphere) can never see NaN.
+    geometry.setPoints(points);
+
+    // Guard 6: angular-velocity damping only from finite values.
+    const av = readAngvel(card.current);
+    const rt = readRotation(card.current);
+    if (!av || !rt) return;
+    card.current.setAngvel({ x: av.x, y: av.y - rt.y * 0.25, z: av.z });
   });
 
   return (
