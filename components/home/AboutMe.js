@@ -1,5 +1,4 @@
 import { Caveat } from 'next/font/google';
-import { FaBolt, FaCode, FaPalette, FaServer } from 'react-icons/fa';
 import FlipCard from '@/components/ui/FlipCard.js';
 
 const handwriting = Caveat({
@@ -36,6 +35,7 @@ function Polaroid({ caption, rotate = '', front, back, flipLabel, tapeLeft = '',
             back={back}
             axis="y"
             flipOnClick
+            flipOnHover
             draggable
             tilt
             tiltMax={10}
@@ -161,17 +161,8 @@ function Tag({ label, bg, fg, rotate = '' }) {
   );
 }
 
-function Tile({ bg, fg, label, children }) {
-  return (
-    <span
-      role="img"
-      aria-label={label}
-      className="inline-flex h-10 w-10 items-center justify-center text-[18px]"
-      style={{ backgroundColor: bg, color: fg, clipPath: TORN_EDGES }}
-    >
-      {children}
-    </span>
-  );
+function Tile() {
+  return null;
 }
 
 export default function AboutMe() {
@@ -226,21 +217,9 @@ export default function AboutMe() {
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-3">
               <Tag label="Frontend Dev" bg="#ffc531" fg="#232323" rotate="-rotate-1" />
-              <Tile bg="#e0a90f" fg="#232323" label="Code icon">
-                <FaCode aria-hidden="true" />
-              </Tile>
               <Tag label="Backend Dev" bg="#2fbf71" fg="#ffffff" rotate="rotate-1" />
-              <Tile bg="#1f9d58" fg="#ffffff" label="Server icon">
-                <FaServer aria-hidden="true" />
-              </Tile>
               <Tag label="UI Design" bg="#f4588a" fg="#ffffff" rotate="-rotate-1" />
-              <Tile bg="#d63f72" fg="#ffffff" label="Palette icon">
-                <FaPalette aria-hidden="true" />
-              </Tile>
               <Tag label="Motion Design" bg="#2f5bff" fg="#101010" rotate="rotate-1" />
-              <Tile bg="#2446c4" fg="#ffffff" label="Motion icon">
-                <FaBolt aria-hidden="true" />
-              </Tile>
             </div>
           </div>
 

@@ -29,6 +29,7 @@ export default function FlipCard({
   onFlipChange,
   axis = 'y',
   flipOnClick = true,
+  flipOnHover = false,
   draggable = true,
   dragDistance = 0,
   tilt = true,
@@ -62,6 +63,7 @@ export default function FlipCard({
   }, [shown]);
   const rootRef = useRef(null);
   const grip = useRef(null);
+  const hoverFlip = useRef(false);
   const spin = useRef(null);
   const target = useRef(shown ? 180 : 0);
 
@@ -227,9 +229,24 @@ export default function FlipCard({
       onLostPointerCapture={(e) => release(e, true)}
       onPointerEnter={(e) => {
         if (!reduce && !disabled && e.pointerType !== 'touch') lift.set(hoverScale);
+        if (
+          flipOnHover &&
+          !reduce &&
+          !disabled &&
+          e.pointerType !== 'touch' &&
+          !grip.current &&
+          !shownRef.current
+        ) {
+          hoverFlip.current = true;
+          flip(false);
+        }
       }}
       onPointerLeave={() => {
         if (!grip.current) rest();
+        if (flipOnHover && hoverFlip.current) {
+          hoverFlip.current = false;
+          if (shownRef.current && !grip.current) flip(false);
+        }
       }}
       onKeyDown={onKeyDown}
       onClick={onClick}
