@@ -7,7 +7,8 @@ const handwriting = Caveat({
   display: 'swap',
 });
 
-const INK = '#232323';
+const INK = '#f4f4f5';
+const INK_SOFT = '#d4d4d8';
 
 // Tepi robek ala washi tape (kiri-kanan bergerigi, atas-bawah lurus).
 const TORN_EDGES =
@@ -114,13 +115,15 @@ function Tile({ bg, fg, label, children }) {
 
 export default function AboutMe() {
   return (
-    <section aria-label="About me" className="relative overflow-hidden bg-[#faf8f2]">
-      {/* Garis buku tulis */}
+    <section aria-label="About me" className="relative overflow-hidden border-t border-white/[0.06] bg-[#0a0a0a]">
+      {/* Kilau lembut + grid samar agar menyatu dengan tema dark */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
-          backgroundImage: 'repeating-linear-gradient(to bottom, transparent 0 31px, rgba(35,35,35,0.07) 31px 32px)',
+          backgroundImage:
+            'radial-gradient(60% 45% at 50% 0%, rgba(255,255,255,0.07), transparent 70%), linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)',
+          backgroundSize: 'auto, 32px 32px, 32px 32px',
         }}
       />
 
@@ -147,7 +150,7 @@ export default function AboutMe() {
 
             <p
               className={`${handwriting.className} mx-auto mt-6 max-w-[560px] text-[26px] font-medium leading-[1.35] sm:text-[28px]`}
-              style={{ color: INK }}
+              style={{ color: INK_SOFT }}
             >
               I&apos;m a software engineering student who gets a little too excited about turning
               ideas into websites. I care about clean interfaces, the small details everyone
