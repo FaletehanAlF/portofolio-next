@@ -1,6 +1,7 @@
 import PixelSnow from '@/components/ui/PixelSnow.js';
 import LanyardWrapper from '@/components/home/LanyardWrapper.js';
 import SpecularButton from '@/components/ui/SpecularButton.js';
+import DepthText from '@/components/ui/DepthText.js';
 
 export default function Hero() {
   return (
@@ -30,8 +31,23 @@ export default function Hero() {
           <div className="relative z-10 max-w-[640px]">
             <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-zinc-500">Software Engineering Student</p>
 
-            <h1 className="mt-4 text-[30px] font-[600] leading-[1.05] tracking-[-0.03em] text-white sm:text-[36px] lg:text-[40px]">
-              Faletehan Al Farabi
+            <h1 className="mt-5 max-w-full overflow-visible pb-2">
+              <DepthText
+                text="Faletehan Al Farabi"
+                layers={28}
+                depth={2}
+                faceColor="#f8fafc"
+                depthColor="#525252"
+                tilt={6}
+                pointerTracking
+                smoothing={0.14}
+                perspective={900}
+                autoOrbit
+                orbitSpeed={0.3}
+                fontSize="clamp(1.7rem, 4vw + 1rem, 2.65rem)"
+                fontWeight={800}
+                shadow
+              />
             </h1>
 
             <p className="mt-3 text-[15px] font-normal leading-6 tracking-[-0.01em] text-zinc-400 sm:text-[16px]">
