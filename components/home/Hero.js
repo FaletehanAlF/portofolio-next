@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import PixelSnow from '@/components/ui/PixelSnow.js';
 import LanyardWrapper from '@/components/home/LanyardWrapper.js';
+import SpecularButton from '@/components/ui/SpecularButton.js';
 
 export default function Hero() {
   return (
@@ -44,9 +44,26 @@ export default function Hero() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
+              <SpecularButton
                 href="/projects"
-                className="inline-flex h-9 items-center justify-center gap-2 rounded-full bg-white px-5 text-[13px] font-medium tracking-[-0.01em] text-black transition-colors hover:bg-zinc-200"
+                size="sm"
+                radius={18}
+                tint="#ffffff"
+                tintOpacity={0.1}
+                blur={8}
+                textColor="#ffffff"
+                lineColor="#ffffff"
+                baseColor="#737373"
+                intensity={1.2}
+                shineSize={10}
+                shineFade={40}
+                thickness={1}
+                speed={0.35}
+                followMouse
+                proximity={250}
+                autoAnimate={false}
+                className="text-[13px] font-medium tracking-[-0.01em]"
+                ariaLabel="View Projects"
               >
                 View Projects
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -58,11 +75,28 @@ export default function Hero() {
                     strokeLinejoin="round"
                   />
                 </svg>
-              </Link>
-              <a
+              </SpecularButton>
+              <SpecularButton
                 href="/cv-faletehan-al-farabi.pdf"
                 download="CV-Faletehan-Al-Farabi.pdf"
-                className="inline-flex h-9 items-center justify-center gap-2 rounded-full border border-white/15 bg-transparent px-5 text-[13px] font-medium tracking-[-0.01em] text-white transition-colors hover:border-white/25 hover:bg-white/[0.04]"
+                size="sm"
+                radius={18}
+                tint="#ffffff"
+                tintOpacity={0.02}
+                blur={6}
+                textColor="#f5f5f5"
+                lineColor="#ffffff"
+                baseColor="#525252"
+                intensity={1}
+                shineSize={10}
+                shineFade={40}
+                thickness={1}
+                speed={0.35}
+                followMouse
+                proximity={250}
+                autoAnimate={false}
+                className="text-[13px] font-medium tracking-[-0.01em]"
+                ariaLabel="Download CV"
               >
                 Download CV
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -74,7 +108,7 @@ export default function Hero() {
                     strokeLinejoin="round"
                   />
                 </svg>
-              </a>
+              </SpecularButton>
             </div>
           </div>
 

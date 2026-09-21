@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import SpecularButton from '@/components/ui/SpecularButton.js';
 
 export default function ProjectCard({ project }) {
   if (!project) return null;
@@ -40,13 +40,30 @@ export default function ProjectCard({ project }) {
           </div>
         ) : null}
 
-        <div className="mt-5 flex gap-3">
-          <Link
+        <div className="mt-5 flex items-center gap-3">
+          <SpecularButton
             href={`/projects/${slug}`}
-            className="inline-flex items-center text-[13px] font-medium tracking-[-0.01em] text-white transition-colors hover:text-zinc-300"
+            size="sm"
+            radius={14}
+            tint="#ffffff"
+            tintOpacity={0.06}
+            blur={6}
+            textColor="#ffffff"
+            lineColor="#ffffff"
+            baseColor="#525252"
+            intensity={1}
+            shineSize={10}
+            shineFade={40}
+            thickness={1}
+            speed={0.35}
+            followMouse
+            proximity={200}
+            autoAnimate={false}
+            className="text-[13px]"
+            ariaLabel={`View ${title} project`}
           >
-            View Project <span aria-hidden="true" className="ml-1">→</span>
-          </Link>
+            View Project <span aria-hidden="true">→</span>
+          </SpecularButton>
           {links?.github ? (
             <a
               href={links.github}
