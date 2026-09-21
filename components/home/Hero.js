@@ -26,7 +26,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/0 via-[#0a0a0a]/0 to-[#0a0a0a]" />
       </div>
 
-      <div className="mx-auto mt-4 max-w-[1120px] px-6 pb-14 pt-2 sm:px-8 sm:pb-16 sm:pt-3 lg:pb-20 lg:pt-4">
+      <div className="mx-auto mt-4 max-w-[1120px] px-6 pb-14 pt-0 sm:px-8 sm:pb-16 sm:pt-1 lg:pb-20 lg:pt-2">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-6">
           <div className="relative z-10 max-w-[640px]">
             <SplitText
