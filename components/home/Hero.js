@@ -46,16 +46,35 @@ export default function Hero() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/projects"
-                className="inline-flex h-9 items-center justify-center rounded-full bg-white px-5 text-[13px] font-medium tracking-[-0.01em] text-black transition-colors hover:bg-zinc-200"
+                className="inline-flex h-9 items-center justify-center gap-2 rounded-full bg-white px-5 text-[13px] font-medium tracking-[-0.01em] text-black transition-colors hover:bg-zinc-200"
               >
                 View Projects
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M3 8h10M8.5 4.5 12 8l-3.5 3.5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </Link>
-              <Link
-                href="/contact"
-                className="inline-flex h-9 items-center justify-center rounded-full border border-white/15 bg-transparent px-5 text-[13px] font-medium tracking-[-0.01em] text-white transition-colors hover:border-white/25 hover:bg-white/[0.04]"
+              <a
+                href="/cv-faletehan-al-farabi.pdf"
+                download="CV-Faletehan-Al-Farabi.pdf"
+                className="inline-flex h-9 items-center justify-center gap-2 rounded-full border border-white/15 bg-transparent px-5 text-[13px] font-medium tracking-[-0.01em] text-white transition-colors hover:border-white/25 hover:bg-white/[0.04]"
               >
-                Contact Me
-              </Link>
+                Download CV
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path
+                    d="M8 2.5V10m0 0L5.5 7.5M8 10l2.5-2.5M3 12.5V13a1.5 1.5 0 0 0 1.5 1.5h7A1.5 1.5 0 0 0 13 13v-.5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
             </div>
           </div>
 
