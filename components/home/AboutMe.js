@@ -197,9 +197,15 @@ export default function AboutMe() {
         </p>
 
         <div className="mt-6 grid items-center gap-10 lg:grid-cols-[240px_minmax(0,1fr)_240px] lg:gap-8">
-          <Polaroid caption="2024" rotate="-rotate-3" tapeLeft="bg-[#c3d4f5]/80" tapeRight="bg-[#f5e6b8]/90">
-            <PortraitArt />
-          </Polaroid>
+          <Polaroid
+            caption="2024"
+            rotate="-rotate-3"
+            front={<PortraitArt />}
+            back={<ProfileBack />}
+            flipLabel="Photo card, flip for intro"
+            tapeLeft="bg-[#c3d4f5]/80"
+            tapeRight="bg-[#f5e6b8]/90"
+          />
 
           <div className="text-center">
             <h2
@@ -241,11 +247,12 @@ export default function AboutMe() {
           <Polaroid
             caption="my workspace"
             rotate="rotate-2"
+            front={<WorkspaceArt />}
+            back={<WorkspaceBack />}
+            flipLabel="Workspace card, flip for tools"
             tapeLeft="bg-[#c3d4f5]/80"
             tapeRight="bg-[#f5e6b8]/90"
-          >
-            <WorkspaceArt />
-          </Polaroid>
+          />
         </div>
       </div>
     </section>

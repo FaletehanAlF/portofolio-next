@@ -57,7 +57,9 @@ export default function FlipCard({
   const [dragging, setDragging] = useState(false);
   const shown = controlled ? flipped : inner;
   const shownRef = useRef(shown);
-  shownRef.current = shown;
+  useEffect(() => {
+    shownRef.current = shown;
+  }, [shown]);
   const rootRef = useRef(null);
   const grip = useRef(null);
   const spin = useRef(null);
