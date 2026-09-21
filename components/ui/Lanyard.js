@@ -49,6 +49,13 @@ function readRotation(body) {
   return r;
 }
 
+// The card model's front face is UV-mapped to the LEFT half of the texture
+// atlas and the back face to the RIGHT half (measured from card.glb). Each
+// custom image is composited into its own half so the two faces render
+// independently, aspect-preserving (no stretching).
+const FRONT_UV_RECT = { x: 0, y: 0, w: 0.5, h: 0.755 };
+const BACK_UV_RECT = { x: 0.5, y: 0, w: 0.5, h: 0.757 };
+
 export default function Lanyard({
   position = [0, 0, 30],
   gravity = [0, -40, 0],
