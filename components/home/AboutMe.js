@@ -24,13 +24,31 @@ function Tape({ className = '', color = 'bg-[#c3d4f5]/80' }) {
   );
 }
 
-function Polaroid({ caption, rotate = '', children, tapeLeft = '', tapeRight = '' }) {
+function Polaroid({ caption, rotate = '', front, back, flipLabel, tapeLeft = '', tapeRight = '' }) {
   return (
     <figure className={`relative mx-auto w-full max-w-[240px] ${rotate}`}>
-      <Tape className={`-top-2 left-2 -rotate-45 ${tapeLeft}`} />
-      <Tape className={`-top-2 right-2 rotate-45 ${tapeRight}`} />
-      <div className="bg-white p-2 pb-1 shadow-[0_10px_30px_rgba(0,0,0,0.18)]">
-        <div className="relative aspect-[4/5] w-full overflow-hidden bg-neutral-200">{children}</div>
+      <Tape className={`-top-2 left-2 z-10 -rotate-45 ${tapeLeft}`} />
+      <Tape className={`-top-2 right-2 z-10 rotate-45 ${tapeRight}`} />
+      <div className="bg-white p-2 pb-1 shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
+        <div className="flex justify-center">
+          <FlipCard
+            front={front}
+            back={back}
+            axis="y"
+            flipOnClick
+            draggable
+            tilt
+            tiltMax={10}
+            glare
+            hoverScale={1.02}
+            width={224}
+            height={280}
+            radius={6}
+            background="#17171c"
+            color="#f5f5f5"
+            ariaLabel={flipLabel}
+          />
+        </div>
         <figcaption
           className={`${handwriting.className} py-1 text-center text-[20px] font-medium leading-none`}
           style={{ color: '#6b6b6b' }}
@@ -86,6 +104,48 @@ function WorkspaceArt() {
       >
         {'</>'}
       </span>
+    </div>
+  );
+}
+
+function ProfileBack() {
+  return (
+    <div className="flex h-full w-full flex-col items-center justify-center p-5 text-center">
+      <p className={`${handwriting.className} text-[24px] font-semibold leading-none text-zinc-400`}>
+        hello, i&apos;m
+      </p>
+      <p className="mt-2 text-[17px] font-semibold tracking-[-0.01em] text-white">
+        Faletehan Al Farabi
+      </p>
+      <p className="mt-1 text-[12px] leading-5 text-zinc-400">
+        Software Engineering Student
+        <br />
+        Full-Stack Web Developer
+      </p>
+      <p className={`${handwriting.className} mt-4 text-[18px] font-medium leading-none text-zinc-500`}>
+        tap to flip back
+      </p>
+    </div>
+  );
+}
+
+function WorkspaceBack() {
+  const tools = ['VS Code', 'Next.js', 'Tailwind CSS', 'Git & GitHub', 'Figma', 'Supabase'];
+  return (
+    <div className="flex h-full w-full flex-col justify-center p-5">
+      <p className={`${handwriting.className} text-center text-[24px] font-semibold leading-none text-zinc-400`}>
+        daily drivers
+      </p>
+      <ul className="mt-3 space-y-1.5">
+        {tools.map((tool) => (
+          <li
+            key={tool}
+            className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-center text-[12px] text-zinc-300"
+          >
+            {tool}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
