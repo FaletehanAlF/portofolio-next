@@ -29,6 +29,8 @@ export default function ShapeGrid({
     const isHex = shape === 'hexagon';
     const isTri = shape === 'triangle';
     const isCircle = shape === 'circle';
+    const opacities = cellOpacities.current;
+    const trails = trailCells.current;
     const hexHoriz = squareSize * 1.5;
     const hexVert = squareSize * Math.sqrt(3);
 
@@ -364,8 +366,8 @@ export default function ShapeGrid({
       document.removeEventListener('visibilitychange', onVisibility);
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseleave', handleMouseLeave);
-      trailCells.current = [];
-      cellOpacities.current.clear();
+      trails.length = 0;
+      opacities.clear();
     };
   }, [direction, speed, borderColor, hoverFillColor, squareSize, shape, hoverTrailAmount]);
 
