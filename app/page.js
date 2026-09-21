@@ -1,6 +1,7 @@
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
 import TechStack from "@/components/home/TechStack";
+import AboutMe from "@/components/home/AboutMe";
 import FeaturedProjects from "@/components/home/FeaturedProjects";
 import ExperiencePreview from "@/components/home/ExperiencePreview";
 import ContactCTA from "@/components/home/ContactCTA";
@@ -14,6 +15,7 @@ export default function Home() {
       <main>
         <Hero />
         <TechStack />
+        <AboutMe />
         <FeaturedProjects />
         <ExperiencePreview />
         <ContactCTA />
