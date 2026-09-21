@@ -177,15 +177,9 @@ const ClickSpark = ({
     };
   }, [sparkColor, sparkSize, sparkRadius, duration, easing, extraScale, syncSize]);
 
-  const handleClick = useCallback(
-    (e) => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      // Kanvas fixed = origin viewport, jadi kurangi rect agar tetap tepat
-      // walau ada pinch-zoom / visual viewport yang bergeser.
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+  const burstAt = useCallback(
+    (x, y) => {
+      if (!Number.isFinite(x) || !Number.isFinite(y)) return;
       const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
       const newSparks = Array.from({ length: sparkCount }, (_, i) => ({
         x,
@@ -204,8 +198,23 @@ const ClickSpark = ({
     [sparkCount]
   );
 
+  // Dengarkan klik di window (capture) agar tidak ada yang terlewat atau
+  // diubah koordinatnya oleh stopPropagation / portal.
+  useEffect(() => {
+    const onWindowClick = (e) => {
+      // Klik keyboard (Enter/Space) punya koordinat 0,0 — jangan gambar di pojok.
+      if (e.detail === 0 && e.clientX === 0 && e.clientY === 0) return;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      burstAt(e.clientX - rect.left, e.clientY - rect.top);
+    };
+    window.addEventListener('click', onWindowClick, true);
+    return () => window.removeEventListener('click', onWindowClick, true);
+  }, [burstAt]);
+
   return (
-    <div className={`relative h-full w-full ${className}`} onClick={handleClick}>
+    <div className={`relative h-full w-full ${className}`}>
       <canvas
         ref={canvasRef}
         aria-hidden="true"
