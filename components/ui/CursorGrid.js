@@ -36,21 +36,26 @@ const CursorGrid = ({
   const propsRef = useRef({});
   const wakeRef = useRef(null);
 
-  propsRef.current = {
-    cellSize,
-    color,
-    radius,
-    falloff,
-    holdTime,
-    fadeDuration,
-    lineWidth,
-    maxOpacity,
-    fillOpacity,
-    gridOpacity,
-    cellRadius,
-    clickPulse,
-    pulseSpeed
-  };
+  // Synced in an effect (not during render) so the render pass stays pure
+  // and the `react-hooks/refs` lint rule is satisfied. Declared before the
+  // main effect so fresh props are visible on mount.
+  useEffect(() => {
+    propsRef.current = {
+      cellSize,
+      color,
+      radius,
+      falloff,
+      holdTime,
+      fadeDuration,
+      lineWidth,
+      maxOpacity,
+      fillOpacity,
+      gridOpacity,
+      cellRadius,
+      clickPulse,
+      pulseSpeed
+    };
+  });
 
   useEffect(() => {
     const container = containerRef.current;
@@ -279,7 +284,6 @@ const CursorGrid = ({
       container.removeEventListener('pointermove', onPointerMove);
       container.removeEventListener('pointerdown', onPointerDown);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cellSize]);
 
   // Repaint static layers when visual props change while idle
