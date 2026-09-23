@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import GooeyNav from '@/components/ui/GooeyNav.js';
 
 const navLinks = [
@@ -15,51 +15,12 @@ const navLinks = [
   { href: '/contact', label: 'Contact' },
 ];
 
-const ABOUT_HREF = '/#about';
-
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  // Scroll-spy khusus homepage: pill aktif mengikuti posisi scroll
-  // (Hero → Home, section #about → About). Di route lain null = ikuti pathname.
-  // Nilai awal selalu null agar render server & client identik (tanpa hydration
-  // mismatch); sinkronisasi hash/scroll hanya jalan setelah mount (client-only).
-  const [spyActive, setSpyActive] = useState(null);
-
-  useEffect(() => {
-    if (pathname !== '/') return undefined;
-    const sync = () => {
-      // Sumber kebenaran = posisi scroll, bukan hash. Hash (#about) tetap
-      // menempel di URL setelah diklik, jadi kalau hash dijadikan prioritas,
-      // pill akan terkunci di About dan tidak mau balik ke Home saat
-      // user scroll ke atas. Dengan berbasis scroll, pill selalu mengikuti
-      // posisi section baik setelah klik maupun saat scroll manual.
-      const about = document.getElementById('about');
-      if (!about) {
-        setSpyActive('/');
-        return;
-      }
-      const top = about.getBoundingClientRect().top + window.scrollY;
-      setSpyActive(window.scrollY >= top - 120 ? ABOUT_HREF : '/');
-    };
-    // Dijadwalkan via rAF (bukan sinkron di body effect) agar tidak memicu
-    // cascading render dan lolos aturan set-state-in-effect.
-    const raf = requestAnimationFrame(sync);
-    window.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('resize', sync);
-    window.addEventListener('hashchange', sync);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener('scroll', sync);
-      window.removeEventListener('resize', sync);
-      window.removeEventListener('hashchange', sync);
-    };
-  }, [pathname]);
 
   const isActiveLink = (href) => {
-    if (spyActive) return href === spyActive;
     if (href === '/') return pathname === '/';
-    if (href.startsWith('/#')) return false;
     return pathname === href || pathname.startsWith(`${href}/`);
   };
 
@@ -76,7 +37,6 @@ export default function Navbar() {
         <div className="hidden items-center md:flex">
           <GooeyNav
             items={navLinks}
-            activeHref={spyActive}
             particleCount={10}
             particleDistances={[60, 12]}
             particleR={60}

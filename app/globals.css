@@ -76,6 +76,29 @@ body {
   animation: star-movement-top linear infinite alternate;
 }
 
+/* Page enter — transisi masuk halaman (murni CSS, jalan di compositor:
+   opacity + transform saja, tanpa JS, tanpa layout thrash) */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-star-movement-bottom,
   .animate-star-movement-top {

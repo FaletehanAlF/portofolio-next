@@ -76,7 +76,7 @@ export default function AboutPage() {
     <div className={body.className}>
       <Navbar />
 
-      <main className="bg-[#0a0a0a]">
+      <main className="page-enter bg-[#0a0a0a]">
         {/* 1 — Hero / Intro */}
         <section id="about" className="relative isolate overflow-hidden">
           <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
