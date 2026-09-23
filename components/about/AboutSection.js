@@ -1,4 +1,5 @@
 import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
+import GridBackground from '@/components/ui/GridBackground.js';
 import Reveal from '@/components/about/Reveal.js';
 
 const display = Space_Grotesk({
@@ -52,9 +53,14 @@ export default function AboutSection() {
     <section
       id="about"
       aria-label="About me"
-      className={`${body.className} scroll-mt-24 border-t border-white/[0.06] bg-[#0a0a0a]`}
+      className={`${body.className} relative isolate scroll-mt-24 overflow-hidden border-t border-white/[0.06] bg-[#0a0a0a]`}
     >
-      <div className="mx-auto max-w-[1120px] px-6 py-12 sm:px-8 sm:py-16">
+      {/* Background interaktif yang sama persis seperti hero */}
+      <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+        <GridBackground />
+      </div>
+
+      <div className="relative mx-auto max-w-[1120px] px-6 py-12 sm:px-8 sm:py-16">
         {/* Header */}
         <Reveal>
           <p

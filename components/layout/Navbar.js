@@ -17,32 +17,36 @@ const navLinks = [
 
 const ABOUT_HREF = '/#about';
 
-// State awal spy: dukung kunjungan langsung ke /#about tanpa setState di effect.
-function getInitialSpy() {
-  if (typeof window === 'undefined') return null;
-  return window.location.hash === '#about' ? ABOUT_HREF : null;
-}
-
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   // Scroll-spy khusus homepage: pill aktif mengikuti posisi scroll
   // (Hero → Home, section #about → About). Di route lain null = ikuti pathname.
-  const [spyActive, setSpyActive] = useState(getInitialSpy);
+  // Nilai awal selalu null agar render server & client identik (tanpa hydration
+  // mismatch); sinkronisasi hash/scroll hanya jalan setelah mount (client-only).
+  const [spyActive, setSpyActive] = useState(null);
 
   useEffect(() => {
     if (pathname !== '/') return undefined;
     const about = document.getElementById('about');
     if (!about) return undefined;
-    const onScroll = () => {
+    const sync = () => {
+      if (window.location.hash === '#about') {
+        setSpyActive(ABOUT_HREF);
+        return;
+      }
       const top = about.getBoundingClientRect().top + window.scrollY;
       setSpyActive(window.scrollY >= top - 120 ? ABOUT_HREF : '/');
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    // Dijadwalkan via rAF (bukan sinkron di body effect) agar tidak memicu
+    // cascading render dan lolos aturan set-state-in-effect.
+    const raf = requestAnimationFrame(sync);
+    window.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', sync);
+      window.removeEventListener('resize', sync);
     };
   }, [pathname]);
 
