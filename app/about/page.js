@@ -71,8 +71,7 @@ export default function AboutPage() {
 
               {/* Right */}
               <Reveal delay={80} className="mt-6 lg:mt-0">
-                {/* Profile area — no fake image. Empty container maintains layout for when real image is added. */}
-                <div className="aspect-[4/5] w-full rounded-2xl border border-white/10 bg-white/[0.02]" />
+                <AboutProfileCard />
               </Reveal>
             </div>
           </div>
