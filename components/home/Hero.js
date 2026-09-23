@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import ShapeGrid from '@/components/ui/ShapeGrid.js';
+import CursorGrid from '@/components/ui/CursorGrid.js';
 import LanyardWrapper from '@/components/home/LanyardWrapper.js';
 import SplitText from '@/components/ui/SplitText.js';
 import Shuffle from '@/components/ui/Shuffle.js';
@@ -10,14 +10,20 @@ export default function Hero() {
     <section className="relative isolate overflow-hidden bg-[#0a0a0a]">
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
         <div className="pointer-events-auto absolute inset-0">
-          <ShapeGrid
-            speed={0.5}
-            squareSize={48}
-            direction="diagonal"
-            borderColor="rgba(255, 255, 255, 0.07)"
-            hoverFillColor="rgba(255, 255, 255, 0.12)"
-            shape="square"
-            hoverTrailAmount={5}
+          <CursorGrid
+            cellSize={48}
+            color="#22d3ee"
+            radius={160}
+            falloff="smooth"
+            holdTime={350}
+            fadeDuration={900}
+            lineWidth={1}
+            maxOpacity={0.7}
+            fillOpacity={0.06}
+            gridOpacity={0.08}
+            cellRadius={6}
+            clickPulse
+            pulseSpeed={650}
           />
         </div>
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/0 via-[#0a0a0a]/0 to-[#0a0a0a]" />
