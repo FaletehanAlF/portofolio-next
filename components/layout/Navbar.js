@@ -28,11 +28,15 @@ export default function Navbar() {
 
   useEffect(() => {
     if (pathname !== '/') return undefined;
-    const about = document.getElementById('about');
-    if (!about) return undefined;
     const sync = () => {
-      if (window.location.hash === '#about') {
-        setSpyActive(ABOUT_HREF);
+      // Sumber kebenaran = posisi scroll, bukan hash. Hash (#about) tetap
+      // menempel di URL setelah diklik, jadi kalau hash dijadikan prioritas,
+      // pill akan terkunci di About dan tidak mau balik ke Home saat
+      // user scroll ke atas. Dengan berbasis scroll, pill selalu mengikuti
+      // posisi section baik setelah klik maupun saat scroll manual.
+      const about = document.getElementById('about');
+      if (!about) {
+        setSpyActive('/');
         return;
       }
       const top = about.getBoundingClientRect().top + window.scrollY;
@@ -43,10 +47,12 @@ export default function Navbar() {
     const raf = requestAnimationFrame(sync);
     window.addEventListener('scroll', sync, { passive: true });
     window.addEventListener('resize', sync);
+    window.addEventListener('hashchange', sync);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('scroll', sync);
       window.removeEventListener('resize', sync);
+      window.removeEventListener('hashchange', sync);
     };
   }, [pathname]);
 
