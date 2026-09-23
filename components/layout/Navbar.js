@@ -58,7 +58,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-4 z-50 mt-4 w-full bg-transparent px-4 sm:px-6">
+    <header className="sticky top-0 z-50 w-full bg-transparent px-4 pt-4 sm:px-6">
       <nav
         className="mx-auto flex h-[56px] max-w-[1120px] items-center justify-between rounded-full border border-white/10 bg-white/[0.06] px-6 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl backdrop-saturate-150 sm:px-8"
         aria-label="Primary"
