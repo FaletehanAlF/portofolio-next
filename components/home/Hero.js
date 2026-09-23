@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import CursorGrid from '@/components/ui/CursorGrid.js';
+import GridBackground from '@/components/ui/GridBackground.js';
 import LanyardWrapper from '@/components/home/LanyardWrapper.js';
 import SplitText from '@/components/ui/SplitText.js';
 import Shuffle from '@/components/ui/Shuffle.js';
