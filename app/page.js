@@ -1,7 +1,7 @@
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/home/Hero";
 import TechStack from "@/components/home/TechStack";
-import AboutMe from "@/components/home/AboutMe";
+import AboutSection from "@/components/about/AboutSection";
 // Disembunyikan sementara — hapus komentar di bawah untuk menampilkan lagi.
 // import FeaturedProjects from "@/components/home/FeaturedProjects";
 // import ExperiencePreview from "@/components/home/ExperiencePreview";
@@ -16,7 +16,7 @@ export default function Home() {
       <main>
         <Hero />
         <TechStack />
-        <AboutMe />
+        <AboutSection />
         {/* Disembunyikan sementara — hapus komentar untuk menampilkan lagi.
         <FeaturedProjects />
         <ExperiencePreview />
