@@ -7,7 +7,7 @@ import GooeyNav from '@/components/ui/GooeyNav.js';
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/#about', label: 'About' },
+  { href: '/about', label: 'About' },
   { href: '/projects', label: 'Projects' },
   { href: '/experience', label: 'Experience' },
   { href: '/education', label: 'Education' },
