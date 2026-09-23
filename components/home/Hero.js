@@ -134,7 +134,7 @@ export default function Hero() {
 
           <div className="relative z-0 mx-auto w-full max-w-[420px] sm:max-w-[480px] lg:max-w-none">
             <LanyardWrapper
-              position={[0, 0, 20]}
+              position={[0, 0, 18]}
               gravity={[0, -40, 0]}
               frontImage="/images/profile/faletehan%20al%20farabi.jpg"
               backImage="/images/profile/faletehan%20al%20farabi.jpg"

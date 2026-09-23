@@ -112,8 +112,9 @@
   mask-size: 150%;
   mask-position: top calc(200% - (var(--background-y) * 5)) left calc(100% - var(--background-x));
   transition: filter 0.8s ease;
-  /* Hover clean & profesional: sheen netral (grayscale), bukan rainbow */
-  filter: brightness(0.5) contrast(1.1) saturate(0) opacity(0.35);
+  /* Hover clean & profesional: sheen netral (grayscale), bukan rainbow.
+     Dibuat redup agar foto tetap jelas di semua perangkat. */
+  filter: brightness(0.55) contrast(1.1) saturate(0) opacity(0.4);
   animation: holo-bg 18s linear infinite;
   animation-play-state: running;
   mix-blend-mode: color-dodge;
@@ -179,13 +180,14 @@
 
 .pc-card:hover .pc-shine,
 .pc-card.active .pc-shine {
-  filter: brightness(0.75) contrast(1.1) saturate(0);
+  /* Hover redup saja — tidak terang, foto tetap terlihat */
+  filter: brightness(0.65) contrast(1.1) saturate(0);
   animation-play-state: paused;
 }
 
 .pc-card:hover .pc-shine::before,
 .pc-card.active .pc-shine::before {
-  opacity: 0.35;
+  opacity: 0.25;
 }
 
 /* Lapisan difference dimatikan agar wajah tidak ter-invert saat hover */

@@ -65,25 +65,35 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {open ? (
-        <div className="mx-auto mt-2 max-w-[1120px] rounded-3xl border border-white/10 bg-[#0a0a0a]/80 p-2 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl backdrop-saturate-150 md:hidden">
-          <div className="flex flex-col px-4 py-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                aria-current={isActiveLink(link.href) ? 'page' : undefined}
-                className={`rounded-full py-3 text-[14px] font-normal transition-colors hover:bg-white/[0.06] hover:text-white ${
-                  isActiveLink(link.href) ? 'text-white' : 'text-zinc-300'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
+      {/* Mobile menu — selalu mounted, buka/tutup via animasi grid-rows +
+          opacity (GPU-friendly, tanpa layout thrash). visibility bertransisi
+          agar link tak bisa di-tab saat tertutup. */}
+      <div
+        className={`mx-auto grid max-w-[1120px] transition-[grid-template-rows,opacity,visibility] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:hidden ${
+          open ? 'visible grid-rows-[1fr] opacity-100' : 'invisible grid-rows-[0fr] opacity-0'
+        }`}
+      >
+        <div className="overflow-hidden">
+          <div className="mt-2 rounded-3xl border border-white/10 bg-[#0a0a0a]/80 p-2 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl backdrop-saturate-150">
+            <div className="flex flex-col px-4 py-2">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={isActiveLink(link.href) ? 'page' : undefined}
+                  tabIndex={open ? 0 : -1}
+                  className={`rounded-full py-3 text-[14px] font-normal transition-colors hover:bg-white/[0.06] hover:text-white ${
+                    isActiveLink(link.href) ? 'text-white' : 'text-zinc-300'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
-      ) : null}
+      </div>
     </header>
   );
 }
