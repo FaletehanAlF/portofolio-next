@@ -16,6 +16,7 @@ import {
   SiTailwindcss,
 } from 'react-icons/si';
 import LogoLoop from '@/components/ui/LogoLoop.js';
+import GridBackground from '@/components/ui/GridBackground.js';
 import { techStack } from '@/data/tech-stack.js';
 
 const techIcons = {
@@ -53,8 +54,12 @@ export default function TechStack() {
   }
 
   return (
-    <section className="border-t border-white/[0.06] bg-[#0a0a0a]">
-      <div className="mx-auto max-w-[1120px] px-6 py-10 sm:px-8">
+    <section className="relative isolate overflow-hidden border-t border-white/[0.06] bg-[#0a0a0a]">
+      {/* Background interaktif yang sama persis seperti hero */}
+      <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+        <GridBackground />
+      </div>
+      <div className="relative mx-auto max-w-[1120px] px-6 py-10 sm:px-8">
         <LogoLoop
           logos={techLogos}
           speed={60}

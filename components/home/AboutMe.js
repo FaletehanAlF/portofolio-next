@@ -1,5 +1,6 @@
 import { Caveat } from 'next/font/google';
 import FlipCard from '@/components/ui/FlipCard.js';
+import GridBackground from '@/components/ui/GridBackground.js';
 
 const handwriting = Caveat({
   weight: ['500', '600', '700'],
@@ -145,17 +146,11 @@ function WorkspaceBack() {
 
 export default function AboutMe() {
   return (
-    <section aria-label="About me" className="relative overflow-hidden border-t border-white/[0.06] bg-[#0a0a0a]">
-      {/* Kilau lembut + grid samar agar menyatu dengan tema dark */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            'radial-gradient(60% 45% at 50% 0%, rgba(255,255,255,0.07), transparent 70%), linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)',
-          backgroundSize: 'auto, 32px 32px, 32px 32px',
-        }}
-      />
+    <section aria-label="About me" className="relative isolate overflow-hidden border-t border-white/[0.06] bg-[#0a0a0a]">
+      {/* Background interaktif yang sama persis seperti hero */}
+      <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+        <GridBackground />
+      </div>
 
       <div className="relative mx-auto max-w-[1120px] px-6 py-12 sm:px-8 sm:py-16">
         <p
