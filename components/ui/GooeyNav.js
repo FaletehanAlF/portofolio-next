@@ -23,6 +23,9 @@ export default function GooeyNav({
   timeVariance = 200,
   colors = [1, 1, 1, 1, 1, 1],
   initialActiveIndex = 0,
+  // Override opsional (mis. dari scroll-spy): href item yang sedang aktif.
+  // Null = ikuti route saat ini seperti biasa.
+  activeHref = null,
 }) {
   const containerRef = useRef(null);
   const navRef = useRef(null);
@@ -35,9 +38,14 @@ export default function GooeyNav({
   // Single source of truth = route saat ini (tidak ada mirror state → tanpa setState di effect).
   // Klik hanya menggerakkan pill + partikel secara optimistis via DOM;
   // class aktif mengikuti pathname setelah navigasi selesai.
-  const activeIndex = pathname
+  // activeHref (mis. dari scroll-spy) menang atas pathname bila cocok dengan salah satu item.
+  let activeIndex = pathname
     ? resolveActiveIndex(items, pathname, initialActiveIndex)
     : initialActiveIndex;
+  if (activeHref) {
+    const overrideIndex = items.findIndex((item) => item && item.href === activeHref);
+    if (overrideIndex >= 0) activeIndex = overrideIndex;
+  }
 
   const later = useCallback((fn, ms) => {
     const id = window.setTimeout(() => {

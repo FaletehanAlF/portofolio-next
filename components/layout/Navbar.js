@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import GooeyNav from '@/components/ui/GooeyNav.js';
 
 const navLinks = [
@@ -14,8 +15,43 @@ const navLinks = [
   { href: '/contact', label: 'Contact' },
 ];
 
+const ABOUT_HREF = '/#about';
+
+// State awal spy: dukung kunjungan langsung ke /#about tanpa setState di effect.
+function getInitialSpy() {
+  if (typeof window === 'undefined') return null;
+  return window.location.hash === '#about' ? ABOUT_HREF : null;
+}
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  // Scroll-spy khusus homepage: pill aktif mengikuti posisi scroll
+  // (Hero → Home, section #about → About). Di route lain null = ikuti pathname.
+  const [spyActive, setSpyActive] = useState(getInitialSpy);
+
+  useEffect(() => {
+    if (pathname !== '/') return undefined;
+    const about = document.getElementById('about');
+    if (!about) return undefined;
+    const onScroll = () => {
+      const top = about.getBoundingClientRect().top + window.scrollY;
+      setSpyActive(window.scrollY >= top - 120 ? ABOUT_HREF : '/');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [pathname]);
+
+  const isActiveLink = (href) => {
+    if (spyActive) return href === spyActive;
+    if (href === '/') return pathname === '/';
+    if (href.startsWith('/#')) return false;
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
 
   return (
     <header className="sticky top-4 z-50 mt-4 w-full bg-transparent px-4 sm:px-6">
@@ -30,6 +66,7 @@ export default function Navbar() {
         <div className="hidden items-center md:flex">
           <GooeyNav
             items={navLinks}
+            activeHref={spyActive}
             particleCount={10}
             particleDistances={[60, 12]}
             particleR={60}
@@ -66,7 +103,10 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="rounded-full py-3 text-[14px] font-normal text-zinc-300 transition-colors hover:bg-white/[0.06] hover:text-white"
+                aria-current={isActiveLink(link.href) ? 'page' : undefined}
+                className={`rounded-full py-3 text-[14px] font-normal transition-colors hover:bg-white/[0.06] hover:text-white ${
+                  isActiveLink(link.href) ? 'text-white' : 'text-zinc-300'
+                }`}
               >
                 {link.label}
               </Link>
