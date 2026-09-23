@@ -245,21 +245,31 @@ const CursorGrid = ({
     };
     wakeRef.current = wake;
 
+    // NOTE: didengar di level window (bukan container) + cek batas canvas.
+    // Lapisan background duduk di -z-10 di belakang konten (teks z-10, lanyard),
+    // sehingga pointermove di atas konten tidak pernah bubble ke container —
+    // grid terasa "mati". Dengan window listener, gerakan di mana pun di atas
+    // area hero tetap menyalakan sel di belakang konten.
     const toLocal = e => {
       const rect = canvas.getBoundingClientRect();
-      return [e.clientX - rect.left, e.clientY - rect.top];
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      if (x < 0 || y < 0 || x > rect.width || y > rect.height) return null;
+      return [x, y];
     };
 
     const onPointerMove = e => {
-      const [x, y] = toLocal(e);
-      energize(x, y);
+      const pos = toLocal(e);
+      if (!pos) return;
+      energize(pos[0], pos[1]);
       wake();
     };
 
     const onPointerDown = e => {
       if (!propsRef.current.clickPulse) return;
-      const [x, y] = toLocal(e);
-      pulses.push({ x, y, t0: performance.now() });
+      const pos = toLocal(e);
+      if (!pos) return;
+      pulses.push({ x: pos[0], y: pos[1], t0: performance.now() });
       wake();
     };
 
@@ -274,15 +284,15 @@ const CursorGrid = ({
     rebuild();
     wake();
 
-    container.addEventListener('pointermove', onPointerMove);
-    container.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('pointerdown', onPointerDown, { passive: true });
 
     return () => {
       cancelAnimationFrame(raf);
       running = false;
       ro?.disconnect();
-      container.removeEventListener('pointermove', onPointerMove);
-      container.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerdown', onPointerDown);
     };
   }, [cellSize]);
 
