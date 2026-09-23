@@ -2,6 +2,7 @@ import Link from 'next/link';
 import ShapeGrid from '@/components/ui/ShapeGrid.js';
 import LanyardWrapper from '@/components/home/LanyardWrapper.js';
 import SplitText from '@/components/ui/SplitText.js';
+import Shuffle from '@/components/ui/Shuffle.js';
 import StarBorder from '@/components/ui/StarBorder.js';
 
 export default function Hero() {
@@ -40,18 +41,20 @@ export default function Hero() {
               textAlign="left"
             />
 
-            <SplitText
+            <Shuffle
               tag="h1"
               text="Faletehan Al Farabi"
               className="mt-5 max-w-full text-[clamp(1.7rem,4vw+1rem,2.65rem)] font-extrabold leading-[1.05] tracking-[-0.03em] text-white"
-              delay={35}
-              duration={0.9}
+              shuffleDirection="right"
+              duration={0.35}
+              animationMode="evenodd"
+              shuffleTimes={1}
               ease="power3.out"
-              splitType="chars"
-              from={{ opacity: 0, y: 50 }}
-              to={{ opacity: 1, y: 0 }}
+              stagger={0.03}
               threshold={0.1}
-              rootMargin="-100px"
+              triggerOnce={true}
+              triggerOnHover={true}
+              respectReducedMotion={true}
               textAlign="left"
             />
 
