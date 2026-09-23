@@ -9,24 +9,7 @@ export default function Hero() {
   return (
     <section className="relative isolate overflow-hidden bg-[#0a0a0a]">
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-        <div className="pointer-events-auto absolute inset-0">
-          <CursorGrid
-            cellSize={48}
-            color="#22d3ee"
-            radius={160}
-            falloff="smooth"
-            holdTime={350}
-            fadeDuration={900}
-            lineWidth={1}
-            maxOpacity={0.7}
-            fillOpacity={0.06}
-            gridOpacity={0.08}
-            cellRadius={6}
-            clickPulse
-            pulseSpeed={650}
-          />
-        </div>
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/0 via-[#0a0a0a]/0 to-[#0a0a0a]" />
+        <GridBackground />
       </div>
 
       <div className="mx-auto max-w-[1120px] px-6 pb-10 pt-3 sm:px-8 sm:pb-14 sm:pt-4 lg:pb-20 lg:pt-6">
