@@ -4,6 +4,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import GridBackground from '@/components/ui/GridBackground.js';
 import Reveal from '@/components/about/Reveal.js';
+import AboutProfileCard from '@/components/about/AboutProfileCard.js';
 
 const display = Space_Grotesk({
   weight: ['500', '600', '700'],
