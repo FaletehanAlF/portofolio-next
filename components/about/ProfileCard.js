@@ -315,7 +315,8 @@ const ProfileCardComponent = ({
             <div className={styles['pc-shine']} />
             <div className={styles['pc-glare']} />
             <div className={`${styles['pc-content']} ${styles['pc-avatar-content']}`}>
-              {/* eslint-disable-next-line @next/next/no-img-element — port React Bits: butuh <img> + onError fallback */}
+              {/* Port React Bits: butuh <img> + onError fallback */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 className={styles.avatar}
                 src={avatarUrl}
