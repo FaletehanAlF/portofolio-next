@@ -331,7 +331,8 @@ const ProfileCardComponent = ({
                 <div className={styles['pc-user-info']}>
                   <div className={styles['pc-user-details']}>
                     <div className={styles['pc-mini-avatar']}>
-                      {/* eslint-disable-next-line @next/next/no-img-element — port React Bits: butuh <img> + onError fallback */}
+                      {/* Port React Bits: butuh <img> + onError fallback */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={miniAvatarUrl || avatarUrl}
                         alt={`${name || 'User'} mini avatar`}
