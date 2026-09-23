@@ -36,8 +36,9 @@ export default function GooeyNav({
 
   const pathname = usePathname();
   // Single source of truth = route saat ini (tidak ada mirror state → tanpa setState di effect).
-  // Klik hanya menggerakkan pill + partikel secara optimistis via DOM;
-  // class aktif mengikuti pathname setelah navigasi selesai.
+  // Klik beda-halaman menggerakkan pill + partikel secara optimistis via DOM;
+  // class aktif mengikuti pathname setelah navigasi selesai. Klik satu-halaman
+  // (anchor) TIDAK optimistis — pill mengikuti scroll-spy agar tidak ganda.
   // activeHref (mis. dari scroll-spy) menang atas pathname bila cocok dengan salah satu item.
   let activeIndex = pathname
     ? resolveActiveIndex(items, pathname, initialActiveIndex)
@@ -160,14 +161,31 @@ export default function GooeyNav({
     [activeIndex, makeParticles, updateEffectPosition]
   );
 
+  // Navigasi satu halaman (mis. '/#about' saat pathname '/' — atau '/'
+  // untuk scroll ke atas) dikendalikan scroll-spy lewat prop activeHref +
+  // posisi scroll. Pill JANGAN digerakkan optimistis di sini: posisi DOM
+  // yang instan vs class aktif reaktif akan disagree selama smooth-scroll
+  // menuju section → dua pill putih menyala sekaligus. Biarkan <Link>
+  // menavigasi, pill mengikuti saat section tiba (satu aktif selalu).
+  const isSamePageHref = useCallback(
+    (href) => {
+      if (!href || !pathname) return false;
+      const [hrefPath] = href.split('#');
+      const targetPath = hrefPath === '' ? pathname : hrefPath;
+      return targetPath === pathname;
+    },
+    [pathname]
+  );
+
   const handleClick = useCallback(
     (e, index) => {
       const anchor = e.currentTarget;
+      if (isSamePageHref(anchor && anchor.getAttribute ? anchor.getAttribute('href') : null)) return;
       const liEl = anchor && anchor.closest ? anchor.closest('li') || anchor : anchor;
       goTo(liEl, index);
       // navigasi tetap via <Link> — tidak di-preventDefault
     },
-    [goTo]
+    [goTo, isSamePageHref]
   );
 
   const handleKeyDown = useCallback(
@@ -181,13 +199,15 @@ export default function GooeyNav({
               ? anchor.parentElement.closest('li') || anchor.parentElement
               : anchor.parentElement
             : anchor;
-        goTo(liEl, index);
+        if (!isSamePageHref(anchor && anchor.getAttribute ? anchor.getAttribute('href') : null)) {
+          goTo(liEl, index);
+        }
         const link = liEl && liEl.querySelector ? liEl.querySelector('a') : null;
         if (link && link !== anchor) link.click();
         else if (anchor && anchor.click && anchor.tagName !== 'A') anchor.click();
       }
     },
-    [goTo]
+    [goTo, isSamePageHref]
   );
 
   useEffect(() => {
