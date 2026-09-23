@@ -79,11 +79,31 @@ export default function Lanyard({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Render loop (WebGL + Rapier physics) hanya jalan saat kartu terlihat di
+  // viewport. Saat user scroll lewat, frameloop dimatikan → hemat GPU/baterai,
+  // tanpa mengubah visual apa pun.
+  const wrapRef = useRef(null);
+  const [inView, setInView] = useState(true);
+
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]) setInView(entries[0].isIntersecting);
+      },
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div aria-hidden="true" className={`relative z-0 w-full overflow-hidden ${className}`.trim()}>
+    <div aria-hidden="true" ref={wrapRef} className={`relative z-0 w-full overflow-hidden ${className}`.trim()}>
       <Canvas
         camera={{ position: position, fov: fov }}
         dpr={[1, isMobile ? 1.5 : 2]}
+        frameloop={inView ? 'always' : 'never'}
         gl={{ alpha: transparent, antialias: true, powerPreference: 'high-performance' }}
         onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
       >
