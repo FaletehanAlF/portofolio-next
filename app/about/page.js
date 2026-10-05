@@ -36,7 +36,7 @@ export default function AboutPage() {
       <Navbar />
 
       <main className="page-enter bg-[#0a0a0a]">
-        {/* 1 â€” Hero / Intro */}
+        {/* 1 — Hero / Intro */}
         <section id="about" className="relative isolate overflow-hidden">
           <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
             <GridBackground />
@@ -77,7 +77,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* 2 â€” Where I'm Heading */}
+        {/* 2 — Where I'm Heading */}
         <section aria-label="Where I'm heading" className="border-t border-white/[0.06]">
           <div className="mx-auto max-w-[1120px] px-6 py-14 sm:px-8 sm:py-16">
             <div className="grid items-end gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,280px)]">
@@ -101,7 +101,7 @@ export default function AboutPage() {
                 >
                   View My Projects
                   <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">
-                    â†’
+                    →
                   </span>
                 </Link>
               </Reveal>
