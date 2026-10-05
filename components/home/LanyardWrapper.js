@@ -12,24 +12,18 @@ const Lanyard = dynamic(() => import('@/components/ui/Lanyard.js'), {
   loading: () => <div aria-hidden="true" className="h-[320px] w-full sm:h-[380px] lg:h-[520px]" />,
 });
 
-// Warm the network cache for the assets Lanyard suspends on, in parallel
-// with the JS chunk, so the card does not pop in late.
-function preload(href, as, type) {
-  const link = document.createElement('link');
-  link.rel = 'preload';
-  link.as = as;
-  link.href = href;
-  if (type) link.type = type;
-  document.head.appendChild(link);
-}
-
 export default function LanyardWrapper(props) {
-  useEffect(() => {
-    preload('/images/lanyard/card.glb', 'fetch', 'model/gltf-binary');
-    preload('/images/lanyard/lanyard.png', 'image');
-    if (props.frontImage) preload(props.frontImage, 'image');
-    if (props.backImage && props.backImage !== props.frontImage) preload(props.backImage, 'image');
-  }, [props.frontImage, props.backImage]);
-
-  return <Lanyard {...props} />;
+  // React 19 mengangkat <link> ini ke <head> — aset mulai diunduh paralel
+  // dengan chunk JS, sehingga kartu tidak telat muncul.
+  return (
+    <>
+      <link rel="preload" href="/images/lanyard/card.glb" as="fetch" crossOrigin="anonymous" />
+      <link rel="preload" href="/images/lanyard/lanyard.png" as="image" />
+      {props.frontImage ? <link rel="preload" href={props.frontImage} as="image" /> : null}
+      {props.backImage && props.backImage !== props.frontImage ? (
+        <link rel="preload" href={props.backImage} as="image" />
+      ) : null}
+      <Lanyard {...props} />
+    </>
+  );
 }
