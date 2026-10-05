@@ -1,6 +1,6 @@
 import ProfileCard from '@/components/about/ProfileCard.js';
 
-const AVATAR_URL = '/images/profile/faletehan%20al%20farabi.jpg';
+const AVATAR_URL = '/images/profile/faletehan-al-farabi.jpg';
 
 export default function AboutProfileCard() {
   return (
