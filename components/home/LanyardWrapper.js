@@ -16,7 +16,7 @@ export default function LanyardWrapper(props) {
   // dengan chunk JS, sehingga kartu tidak telat muncul.
   return (
     <>
-      <link rel="preload" href="/images/lanyard/card.glb" as="fetch" crossOrigin="anonymous" />
+      <link rel="preload" href="/images/lanyard/card.glb" as="fetch" />
       <link rel="preload" href="/images/lanyard/lanyard.png" as="image" />
       {props.frontImage ? <link rel="preload" href={props.frontImage} as="image" /> : null}
       {props.backImage && props.backImage !== props.frontImage ? (
