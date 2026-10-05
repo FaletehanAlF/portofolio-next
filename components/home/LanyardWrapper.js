@@ -1,7 +1,6 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect } from 'react';
 
 // Lanyard uses WebGL + Rapier physics — client-only so SSR never evaluates
 // browser/WASM code paths. This wrapper is a Client Component, so
